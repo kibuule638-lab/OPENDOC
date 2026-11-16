@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">FolioScan</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_folders">Folders</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_settings">Settings</string>
+    <string name="action_scan">Scan</string>
+    <string name="action_scan_first">Scan your first document</string>
+    <string name="export_notification_channel_name">Document Exports</string>
+    <string name="export_notification_channel_desc">Shows progress for multi-page offline PDF and JPEG exports</string>
+    <string name="export_foreground_title">Exporting document…</string>
+    <string name="camera_permission_required">Camera access is needed to capture documents and IDs offline.</string>
+    <string name="grant_permission">Grant Camera Access</string>
+</resources>

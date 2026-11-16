@@ -1,0 +1,256 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "v1folioscan00000000000000000000000",
+    "entities": [
+      {
+        "tableName": "documents",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `title` TEXT NOT NULL, `type` TEXT NOT NULL, `folderId` TEXT, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, `pageCount` INTEGER NOT NULL, `pdfPath` TEXT, `ocrStatus` TEXT NOT NULL, `isVault` INTEGER NOT NULL, `isTrashed` INTEGER NOT NULL, `trashedAt` INTEGER, `coverThumbPath` TEXT, `totalSizeBytes` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          { "fieldPath": "id", "columnName": "id", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "title", "columnName": "title", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "type", "columnName": "type", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "folderId", "columnName": "folderId", "affinity": "TEXT" },
+          { "fieldPath": "createdAt", "columnName": "createdAt", "affinity": "INTEGER", "notNull": true },
+          { "fieldPath": "updatedAt", "columnName": "updatedAt", "affinity": "INTEGER", "notNull": true },
+          { "fieldPath": "pageCount", "columnName": "pageCount", "affinity": "INTEGER", "notNull": true },
+          { "fieldPath": "pdfPath", "columnName": "pdfPath", "affinity": "TEXT" },
+          { "fieldPath": "ocrStatus", "columnName": "ocrStatus", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "isVault", "columnName": "isVault", "affinity": "INTEGER", "notNull": true },
+          { "fieldPath": "isTrashed", "columnName": "isTrashed", "affinity": "INTEGER", "notNull": true },
+          { "fieldPath": "trashedAt", "columnName": "trashedAt", "affinity": "INTEGER" },
+          { "fieldPath": "coverThumbPath", "columnName": "coverThumbPath", "affinity": "TEXT" },
+          { "fieldPath": "totalSizeBytes", "columnName": "totalSizeBytes", "affinity": "INTEGER", "notNull": true }
+        ],
+        "primaryKey": { "autoGenerate": false, "columnNames": ["id"] },
+        "indices": [
+          {
+            "name": "index_documents_folderId",
+            "unique": false,
+            "columnNames": ["folderId"],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_documents_folderId` ON `${TABLE_NAME}` (`folderId`)"
+          },
+          {
+            "name": "index_documents_updatedAt",
+            "unique": false,
+            "columnNames": ["updatedAt"],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_documents_updatedAt` ON `${TABLE_NAME}` (`updatedAt`)"
+          },
+          {
+            "name": "index_documents_isVault_isTrashed",
+            "unique": false,
+            "columnNames": ["isVault", "isTrashed"],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_documents_isVault_isTrashed` ON `${TABLE_NAME}` (`isVault`, `isTrashed`)"
+          }
+        ]
+      },
+      {
+        "tableName": "pages",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `documentId` TEXT NOT NULL, `index` INTEGER NOT NULL, `imagePath` TEXT NOT NULL, `thumbPath` TEXT NOT NULL, `width` INTEGER NOT NULL, `height` INTEGER NOT NULL, `rotation` INTEGER NOT NULL, `filter` TEXT NOT NULL, `adjustmentsJson` TEXT NOT NULL, `redactionsJson` TEXT NOT NULL, `signatureJson` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`documentId`) REFERENCES `documents`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          { "fieldPath": "id", "columnName": "id", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "documentId", "columnName": "documentId", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "index", "columnName": "index", "affinity": "INTEGER", "notNull": true },
+          { "fieldPath": "imagePath", "columnName": "imagePath", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "thumbPath", "columnName": "thumbPath", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "width", "columnName": "width", "affinity": "INTEGER", "notNull": true },
+          { "fieldPath": "height", "columnName": "height", "affinity": "INTEGER", "notNull": true },
+          { "fieldPath": "rotation", "columnName": "rotation", "affinity": "INTEGER", "notNull": true },
+          { "fieldPath": "filter", "columnName": "filter", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "adjustmentsJson", "columnName": "adjustmentsJson", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "redactionsJson", "columnName": "redactionsJson", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "signatureJson", "columnName": "signatureJson", "affinity": "TEXT", "notNull": true }
+        ],
+        "primaryKey": { "autoGenerate": false, "columnNames": ["id"] },
+        "indices": [
+          {
+            "name": "index_pages_documentId",
+            "unique": false,
+            "columnNames": ["documentId"],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_pages_documentId` ON `${TABLE_NAME}` (`documentId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "documents",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": ["documentId"],
+            "referencedColumns": ["id"]
+          }
+        ]
+      },
+      {
+        "tableName": "folders",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `parentId` TEXT, `name` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          { "fieldPath": "id", "columnName": "id", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "parentId", "columnName": "parentId", "affinity": "TEXT" },
+          { "fieldPath": "name", "columnName": "name", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "createdAt", "columnName": "createdAt", "affinity": "INTEGER", "notNull": true }
+        ],
+        "primaryKey": { "autoGenerate": false, "columnNames": ["id"] },
+        "indices": [
+          {
+            "name": "index_folders_parentId",
+            "unique": false,
+            "columnNames": ["parentId"],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_folders_parentId` ON `${TABLE_NAME}` (`parentId`)"
+          }
+        ]
+      },
+      {
+        "tableName": "tags",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          { "fieldPath": "id", "columnName": "id", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "name", "columnName": "name", "affinity": "TEXT", "notNull": true }
+        ],
+        "primaryKey": { "autoGenerate": false, "columnNames": ["id"] },
+        "indices": [
+          {
+            "name": "index_tags_name",
+            "unique": true,
+            "columnNames": ["name"],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_tags_name` ON `${TABLE_NAME}` (`name`)"
+          }
+        ]
+      },
+      {
+        "tableName": "document_tag_cross_ref",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`documentId` TEXT NOT NULL, `tagId` TEXT NOT NULL, PRIMARY KEY(`documentId`, `tagId`), FOREIGN KEY(`documentId`) REFERENCES `documents`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`tagId`) REFERENCES `tags`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          { "fieldPath": "documentId", "columnName": "documentId", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "tagId", "columnName": "tagId", "affinity": "TEXT", "notNull": true }
+        ],
+        "primaryKey": { "autoGenerate": false, "columnNames": ["documentId", "tagId"] },
+        "indices": [
+          {
+            "name": "index_document_tag_cross_ref_documentId",
+            "unique": false,
+            "columnNames": ["documentId"],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_document_tag_cross_ref_documentId` ON `${TABLE_NAME}` (`documentId`)"
+          },
+          {
+            "name": "index_document_tag_cross_ref_tagId",
+            "unique": false,
+            "columnNames": ["tagId"],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_document_tag_cross_ref_tagId` ON `${TABLE_NAME}` (`tagId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "documents",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": ["documentId"],
+            "referencedColumns": ["id"]
+          },
+          {
+            "table": "tags",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": ["tagId"],
+            "referencedColumns": ["id"]
+          }
+        ]
+      },
+      {
+        "tableName": "page_texts",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`pageId` TEXT NOT NULL, `documentId` TEXT NOT NULL, `text` TEXT NOT NULL, PRIMARY KEY(`pageId`), FOREIGN KEY(`pageId`) REFERENCES `pages`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          { "fieldPath": "pageId", "columnName": "pageId", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "documentId", "columnName": "documentId", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "text", "columnName": "text", "affinity": "TEXT", "notNull": true }
+        ],
+        "primaryKey": { "autoGenerate": false, "columnNames": ["pageId"] },
+        "indices": [
+          {
+            "name": "index_page_texts_documentId",
+            "unique": false,
+            "columnNames": ["documentId"],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_page_texts_documentId` ON `${TABLE_NAME}` (`documentId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "pages",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": ["pageId"],
+            "referencedColumns": ["id"]
+          }
+        ]
+      },
+      {
+        "tableName": "page_texts_fts",
+        "createSql": "CREATE VIRTUAL TABLE IF NOT EXISTS `${TABLE_NAME}` USING FTS4(`documentId` TEXT NOT NULL, `text` TEXT NOT NULL, content=`page_texts`)",
+        "fields": [
+          { "fieldPath": "documentId", "columnName": "documentId", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "text", "columnName": "text", "affinity": "TEXT", "notNull": true }
+        ],
+        "primaryKey": { "autoGenerate": true, "columnNames": ["rowid"] },
+        "ftsVersion": "FTS4",
+        "ftsOptions": {
+          "tokenizer": "simple",
+          "tokenizerArgs": [],
+          "contentTable": "page_texts",
+          "languageIdColumnName": "",
+          "matchInfo": "FTS4",
+          "notIndexedColumns": [],
+          "prefixSizes": [],
+          "preferredOrder": "ASC"
+        },
+        "contentSyncTriggers": [
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_page_texts_fts_BEFORE_UPDATE BEFORE UPDATE ON `page_texts` BEGIN DELETE FROM `page_texts_fts` WHERE `docid`=OLD.`rowid`; END",
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_page_texts_fts_BEFORE_DELETE BEFORE DELETE ON `page_texts` BEGIN DELETE FROM `page_texts_fts` WHERE `docid`=OLD.`rowid`; END",
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_page_texts_fts_AFTER_UPDATE AFTER UPDATE ON `page_texts` BEGIN INSERT INTO `page_texts_fts`(`docid`, `documentId`, `text`) VALUES (NEW.`rowid`, NEW.`documentId`, NEW.`text`); END",
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_page_texts_fts_AFTER_INSERT AFTER INSERT ON `page_texts` BEGIN INSERT INTO `page_texts_fts`(`docid`, `documentId`, `text`) VALUES (NEW.`rowid`, NEW.`documentId`, NEW.`text`); END"
+        ]
+      },
+      {
+        "tableName": "identity_data",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`documentId` TEXT NOT NULL, `fieldsJson` TEXT NOT NULL, `mrzRaw` TEXT, `mrzValid` INTEGER NOT NULL, PRIMARY KEY(`documentId`), FOREIGN KEY(`documentId`) REFERENCES `documents`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          { "fieldPath": "documentId", "columnName": "documentId", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "fieldsJson", "columnName": "fieldsJson", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "mrzRaw", "columnName": "mrzRaw", "affinity": "TEXT" },
+          { "fieldPath": "mrzValid", "columnName": "mrzValid", "affinity": "INTEGER", "notNull": true }
+        ],
+        "primaryKey": { "autoGenerate": false, "columnNames": ["documentId"] },
+        "indices": [
+          {
+            "name": "index_identity_data_documentId",
+            "unique": true,
+            "columnNames": ["documentId"],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_identity_data_documentId` ON `${TABLE_NAME}` (`documentId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "documents",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": ["documentId"],
+            "referencedColumns": ["id"]
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'v1folioscan00000000000000000000000')"
+    ]
+  }
+}

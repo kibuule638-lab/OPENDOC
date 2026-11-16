@@ -1,0 +1,6 @@
+{
+  "name": "FolioScan",
+  "description": "Offline document, ID card, passport MRZ, and business card scanner with on-device OCR, encrypted Private Vault, and PDF/JPG export.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
